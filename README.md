@@ -7,9 +7,9 @@ author: anuchandy
 #Getting Started with Compute - List Virtual Machine Extension Images - in Java #
 
 
-      The main entry point.
-     
-      @param args the parameters
+      Main function which runs the actual sample.
+      @param azure instance of the azure client
+      @return true if sample runs successfully
      
 
 ## Running this Sample ##
