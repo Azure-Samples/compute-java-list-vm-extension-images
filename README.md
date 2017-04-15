@@ -7,10 +7,10 @@ author: anuchandy
 #Getting Started with Compute - List Virtual Machine Extension Images - in Java #
 
 
-      Main function which runs the actual sample.
-      @param azure instance of the azure client
-      @return true if sample runs successfully
-     
+  List all virtual machine extension image publishers and
+  list all virtual machine extension images published by Microsoft.OSTCExtensions, Microsoft.Azure.Extensions
+  by browsing through extension image publishers, types, and versions.
+ 
 
 ## Running this Sample ##
 
