@@ -4,9 +4,8 @@ languages:
 - java
 products:
 - azure
-extensions:
-- services: Compute
-- platforms: java
+description: "List all virtual machine extension image publishers and list all virtual machine extension images published by Microsoft.OSTCExtensions, Microsoft.Azure.Extensions by browsing through extension image publishers, types, and versions."
+urlFragment: compute-java-list-vm-extension-images
 ---
 
 # Getting Started with Compute - List Virtual Machine Extension Images - in Java #
