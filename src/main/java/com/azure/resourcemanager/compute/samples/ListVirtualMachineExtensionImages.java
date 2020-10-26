@@ -1,20 +1,20 @@
-/**
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License. See License.txt in the project root for
- * license information.
- */
-package com.microsoft.azure.management.compute.samples;
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
 
-import com.microsoft.azure.management.Azure;
-import com.microsoft.azure.management.compute.VirtualMachineExtensionImage;
-import com.microsoft.azure.management.compute.VirtualMachineExtensionImageType;
-import com.microsoft.azure.management.compute.VirtualMachineExtensionImageVersion;
-import com.microsoft.azure.management.compute.VirtualMachinePublisher;
-import com.microsoft.azure.management.resources.fluentcore.arm.Region;
-import com.microsoft.rest.LogLevel;
+package com.azure.resourcemanager.compute.samples;
 
-import java.io.File;
-import java.util.List;
+import com.azure.core.credential.TokenCredential;
+import com.azure.core.http.policy.HttpLogDetailLevel;
+import com.azure.core.http.rest.PagedIterable;
+import com.azure.core.management.AzureEnvironment;
+import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.resourcemanager.AzureResourceManager;
+import com.azure.resourcemanager.compute.models.VirtualMachineExtensionImage;
+import com.azure.resourcemanager.compute.models.VirtualMachineExtensionImageType;
+import com.azure.resourcemanager.compute.models.VirtualMachineExtensionImageVersion;
+import com.azure.resourcemanager.compute.models.VirtualMachinePublisher;
+import com.azure.core.management.Region;
+import com.azure.core.management.profile.AzureProfile;
 
 /**
  * List all virtual machine extension image publishers and
@@ -25,10 +25,10 @@ public final class ListVirtualMachineExtensionImages {
 
     /**
      * Main function which runs the actual sample.
-     * @param azure instance of the azure client
+     * @param azureResourceManager instance of the azure client
      * @return true if sample runs successfully
      */
-    public static boolean runSample(Azure azure) {
+    public static boolean runSample(AzureResourceManager azureResourceManager) {
         final Region region = Region.US_WEST_CENTRAL;
 
         //=================================================================
@@ -37,7 +37,7 @@ public final class ListVirtualMachineExtensionImages {
         // published by Microsoft.OSTCExtensions and Microsoft.Azure.Extensions
         // by browsing through extension image publishers, types, and versions
 
-        List<VirtualMachinePublisher> publishers = azure
+        PagedIterable<VirtualMachinePublisher> publishers = azureResourceManager
                 .virtualMachineImages()
                 .publishers()
                 .listByRegion(region);
@@ -90,14 +90,18 @@ public final class ListVirtualMachineExtensionImages {
             //=================================================================
             // Authenticate
 
-            final File credFile = new File(System.getenv("AZURE_AUTH_LOCATION"));
+            final AzureProfile profile = new AzureProfile(AzureEnvironment.AZURE);
+            final TokenCredential credential = new DefaultAzureCredentialBuilder()
+                .authorityHost(profile.getEnvironment().getActiveDirectoryEndpoint())
+                .build();
 
-            Azure azure = Azure.configure()
-                    .withLogLevel(LogLevel.NONE)
-                    .authenticate(credFile)
-                    .withDefaultSubscription();
+            AzureResourceManager azureResourceManager = AzureResourceManager
+                .configure()
+                .withLogLevel(HttpLogDetailLevel.BASIC)
+                .authenticate(credential, profile)
+                .withDefaultSubscription();
 
-            runSample(azure);
+            runSample(azureResourceManager);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
